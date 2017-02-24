@@ -1,0 +1,25 @@
+#install_github("geoffjentry/twitteR")
+#install.packages("openssl")
+#install.packages("httpuv")
+#install.packages("wordcloud")
+#install.packages("RColorBrewer")
+#install.packages("tm", dependencies = TRUE)
+#install.packages("NLP")
+library(twitteR)
+library(devtools)
+library(RColorBrewer)
+library(wordcloud)
+library(tm)
+library(NLP)
+#api_Key <- "" Deleted Both Keys for privacy
+#api_Secret <- ""
+oauth <- setup_twitter_oauth(api_Key, api_Secret)
+myTweets <- userTimeline("Ferrari", n=500)
+str(myTweets[[1]])
+set.seed(1234)
+tweetTexts <- unlist(lapply(myTweets, function(t) { t$text}))
+words <-unlist(strsplit(tweetTexts, " "))
+words<-tolower(words)
+clean_words <- words[-grep("http|@|#", words)]
+#clean_words <- clean_words[grep(["a-z"]|"[0-9]"), clean_words]
+wordcloud(clean_words, random.order= FALSE, max.words = 100, scale = c(3,0.5), min.freq=2, colors=brewer.pal(9, "YlOrRd"))
